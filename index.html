@@ -25,31 +25,36 @@
                 </div>
 
                 {!data ? (
-                    <div className="mt-8">
-                        <label htmlFor="data" className="block text-sm font-medium leading-6 text-gray-900">
-                            Paste your storage summary here
-                        </label>
-                        <div className="mt-2">
-                            <form onSubmit={e => {
-                                e.preventDefault();
-                                setData(JSON.parse(e.currentTarget.elements["data"].value))
-                            }}>
-                                <textarea
-                                    id="data"
-                                    name="data"
-                                    rows={4}
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    defaultValue={''}
-                                />
+                    <>
+                        <div className="mt-8">
+                            <label htmlFor="data" className="block text-sm font-medium leading-6 text-gray-900">
+                                Paste your storage summary here
+                            </label>
+                            <div className="mt-2">
+                                <form onSubmit={e => {
+                                    e.preventDefault();
+                                    setData(JSON.parse(e.currentTarget.elements["data"].value))
+                                }}>
+                                    <textarea
+                                        id="data"
+                                        name="data"
+                                        rows={4}
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        defaultValue={''}
+                                    />
 
-                                <Button type="submit" className="mt-3">Submit</Button>
-                            </form>
+                                    <Button type="submit" className="mt-3">Submit</Button>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                        <div className="mt-8">
+                            <Instructions />
+                        </div>
+                    </>
                 ) : (
                     <>
 
-                        <Stats data={data}/>
+                        <Stats data={data} />
                         <Table data={data} />
 
                         <Button className="mt-5 bg-red-500" onClick={() => setData()}>Reset</Button>
@@ -308,131 +313,668 @@
 </script>
 
 
-
-<!-- 
-<script>
-
-
-
-    var data = [
-        {
-            "itemId": "720",
-            "account": "judedaryl2",
-            "storage": "Storage II",
-            "name": "Aquamarine",
-            "amount": 1,
-            "price": 23279,
-            "total": 23279
-        },
-        {
-            "itemId": "720",
-            "account": "<Master>",
-            "storage": "Master Storage",
-            "name": "Aquamarine",
-            "amount": 42,
-            "price": 23279,
-            "total": 977718
-        },
-        {
-            "itemId": "720",
-            "account": "judedaryl",
-            "storage": "Storage II",
-            "name": "Aquamarine",
-            "amount": 14,
-            "price": 23279,
-            "total": 325906
-        },
-        {
-            "itemId": "985",
-            "account": "judedaryl",
-            "storage": "Storage I",
-            "name": "Elunium",
-            "amount": 1,
-            "price": 37830,
-            "total": 37830
-        },
-        {
-            "itemId": "985",
-            "account": "<Master>",
-            "storage": "Master Storage",
-            "name": "Elunium",
-            "amount": 314,
-            "price": 37830,
-            "total": 11878620
-        },
-        {
-            "itemId": "985",
-            "account": "judedaryl",
-            "storage": "Storage II",
-            "name": "Elunium",
-            "amount": 45,
-            "price": 37830,
-            "total": 1702350
-        }
-    ]
-    const stats = document.getElementById('stats')
-    const table = document.getElementById('data-table').getElementsByTagName('tbody')[0];
-    data.forEach(v => addRow(v))
-
-    renderStats();
-
-    function renderStats() {
-        const storageStats = data.reduce((a, b) => {
-            const key = `${b.storage}: ${b.account}`
-            if (!!a[key]) {
-                a[key] += b.total
-            } else {
-                a[key] = b.total
-            }
-            return a
-        }, {})
-
-        const total = data.reduce((a, b) => a += b.total, 0)
-
-        renderStat('All', total)
-        Object.keys(storageStats).forEach(key => {
-            renderStat(key, storageStats[key])
-        })
-    }
-
-
-    function renderStat(name, value) {
-        const text = `
-            <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                <dt class="truncate text-sm font-medium text-gray-500">${name}</dt>
-                <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">${(value).toLocaleString()} Z</dd>
-            </div>
-        `
-        stats.insertAdjacentHTML('beforeend', text)
-    }
-
-
-
-
-    function addRow(item = data[0]) {
-        const row = table.insertRow(-1);
-        const id = createCell(row, 0, item.itemId)
-        id.className = "whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6"
-        createCell(row, 1, item.name)
-        createCell(row, 2, item.price?.toLocaleString()).className += ' text-strong font-bold text-zinc-900'
-        createCell(row, 3, item.amount)
-        createCell(row, 4, item.total.toLocaleString()).className += ' text-strong font-bold text-zinc-900'
-        createCell(row, 5, item.storage)
-        createCell(row, 6, item.account)
-    }
-
-    function createCell(row, position, value) {
-        const cell = row.insertCell(position)
-        cell.innerHTML = value;
-        cell.className = "whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-        return cell;
-    }
-
-</script> -->
-
 <script type="text/babel">
     const container = document.getElementById('root');
     ReactDOM.createRoot(container).render(<App />);
+</script>
+
+<script type="text/babel">
+
+    function Instructions() {
+        const [copied, setCopied] = React.useState(false);
+        const copyFunction = () => {
+            const copyText = document.getElementById("codeSnippet").textContent;
+            navigator.clipboard.writeText(copyText)
+            setCopied(true)
+            setTimeout(() => {
+                setCopied(false)
+            }, 2000)
+        }
+
+        return (
+            <>
+
+                {copied && (
+                    <div className="rounded-md bg-blue-50 p-4">
+                        <div className="flex">
+                            <div className="ml-3 flex-1 md:flex md:justify-between">
+                                <p className="text-sm text-blue-700">Copied to clipboard</p>
+
+                            </div>
+                        </div>
+                    </div>
+                )}
+                <div className="bg-white shadow sm:rounded-lg">
+                    <div className="px-4 py-5 sm:p-6 h-[500px] overflow-y-auto">
+                        <Code />
+                    </div>
+                </div>
+                <div className="mt-8">
+                    <Button onClick={copyFunction}>Copy</Button>
+                </div>
+            </>
+        )
+    }
+
+
+
+    function Code() {
+        return (
+            <pre
+                id="codeSnippet"
+                style={{
+                    fontFamily: "monospace",
+                    color: "rgb(84, 84, 84)",
+                    backgroundColor: "rgb(254, 254, 254)",
+                    fontWeight: 400
+                }}
+            >
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>function</span>{" "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>parseRow</span>(
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>row</span>) {"{"}
+                {"\n"}
+                {"    "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+                    const
+                </span>{" "}
+                amount = row.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>children</span>[
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>5</span>]?.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>innerText</span>?.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>trim</span>();
+                {"\n"}
+                {"    "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+                    return
+                </span>{" "}
+                {"{"}
+                {"\n"}
+                {"        "}
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>itemId</span>:
+                row.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>children</span>[
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>0</span>]?.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>innerText</span>?.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>trim</span>(),
+                {"\n"}
+                {"        "}
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>account</span>:
+                row.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>children</span>[
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>1</span>]?.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>innerText</span>?.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>trim</span>(),
+                {"\n"}
+                {"        "}
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>storage</span>:
+                row.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>children</span>[
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>2</span>]?.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>innerText</span>?.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>trim</span>(),
+                {"\n"}
+                {"        "}
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>name</span>: row.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>children</span>[
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>4</span>]?.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>innerText</span>?.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>trim</span>(),
+                {"\n"}
+                {"        "}
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>amount</span>:
+                !!amount ?{" "}
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>parseFloat</span>
+                (amount) :{" "}
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>0</span>
+                {"\n"}
+                {"    "}
+                {"}"}
+                {"\n"}
+                {"}"}
+                {"\n"}
+                {"\n"}
+                {"\n"}
+                {"\n"}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+                    function
+                </span>{" "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>batch</span>(
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>
+                    arr, batchSize
+                </span>
+                ) {"{"}
+                {"\n"}
+                {"    "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span>{" "}
+                batches = []{"\n"}
+                {"    "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+                    while
+                </span>{" "}
+                (arr.<span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>length</span>
+                ) {"{"}
+                {"\n"}
+                {"        "}batches.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>push</span>(arr.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>splice</span>(
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>0</span>,
+                batchSize)){"\n"}
+                {"    "}
+                {"}"}
+                {"\n"}
+                {"    "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+                    return
+                </span>{" "}
+                batches;{"\n"}
+                {"}"}
+                {"\n"}
+                {"\n"}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+                    function
+                </span>{" "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>Mutex</span>(
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }} />) {"{"}
+                {"\n"}
+                {"    "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>let</span>{" "}
+                current ={" "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>Promise</span>.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>resolve</span>();
+                {"\n"}
+                {"    "}
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>this</span>.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>lock</span> ={" "}
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>() =&gt;</span>{" "}
+                {"{"}
+                {"\n"}
+                {"        "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>let</span>{" "}
+                _resolve;{"\n"}
+                {"        "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>const</span> p ={" "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>new</span>{" "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>Promise</span>(
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>
+                    <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>resolve</span>{" "}
+                    =&gt;
+                </span>{" "}
+                {"{"}
+                {"\n"}
+                {"            "}_resolve ={" "}
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>() =&gt;</span>{" "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>resolve</span>();
+                {"\n"}
+                {"        "}
+                {"}"});{"\n"}
+                {"        "}
+                <span style={{ color: "rgb(105, 105, 105)", fontWeight: 400 }}>
+    // Caller gets a promise that resolves when the current outstanding
+                </span>
+                {"\n"}
+                {"        "}
+                <span style={{ color: "rgb(105, 105, 105)", fontWeight: 400 }}>
+    // lock resolves
+                </span>
+                {"\n"}
+                {"        "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>const</span> rv
+                = current.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>then</span>(
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>() =&gt;</span>{" "}
+                _resolve);{"\n"}
+                {"        "}
+                <span style={{ color: "rgb(105, 105, 105)", fontWeight: 400 }}>
+    // Don't allow the next request until the new promise is done
+                </span>
+                {"\n"}
+                {"        "}current = p;{"\n"}
+                {"        "}
+                <span style={{ color: "rgb(105, 105, 105)", fontWeight: 400 }}>
+    // Return the new promise
+                </span>
+                {"\n"}
+                {"        "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+                    return
+                </span>{" "}
+                rv;{"\n"}
+                {"    "}
+                {"}"};{"\n"}
+                {"}"}
+                {"\n"}
+                {"\n"}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+                    function
+                </span>{" "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>
+                    VendHistoryFetcher
+                </span>
+                (<span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }} />) {"{"}
+                {"\n"}
+                {"    "}
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>this</span>.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>priceMap</span> ={" "}
+                {"{"}
+                {"}"};{"\n"}
+                {"    "}
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>this</span>.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>lockMap</span> ={" "}
+                {"{"}
+                {"}"};{"\n"}
+                {"\n"}
+                {"\n"}
+                {"    "}
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>this</span>.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>
+                    getItemVendHistory
+                </span>{" "}
+                = <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>async</span>{" "}
+                (itemId) =&gt; {"{"}
+                {"\n"}
+                {"        "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>if</span> (!
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>this</span>.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>lockMap</span>
+                [itemId]) {"{"}
+                {"\n"}
+                {"            "}
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>this</span>.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>lockMap</span>
+                [itemId] ={" "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>new</span>{" "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>Mutex</span>();
+                {"\n"}
+                {"        "}
+                {"}"}
+                {"\n"}
+                {"        "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+                    const
+                </span>{" "}
+                unlock ={" "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>await</span>{" "}
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>this</span>.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>lockMap</span>
+                [itemId].
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>lock</span>()
+                {"\n"}
+                {"\n"}
+                {"        "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>if</span> (!
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>this</span>.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>priceMap</span>
+                [itemId]) {"{"}
+                {"\n"}
+                {"            "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span>{" "}
+                domParser ={" "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>new</span>{" "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>DOMParser</span>
+                ();{"\n"}
+                {"            "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span> hist
+                = <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>await</span>{" "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>fetch</span>(
+                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>
+                    "https://flux.muhro.eu/?module=item&amp;action=view&amp;id="
+                </span>{" "}
+                + itemId).
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>then</span>(
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>
+                    <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>b</span> =&gt;
+                </span>{" "}
+                b.<span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>text</span>())
+                {"\n"}
+                {"            "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span>{" "}
+                histDom = domParser.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>
+                    parseFromString
+                </span>
+                (hist,{" "}
+                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>'text/html'</span>)
+                {"\n"}
+                {"            "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span>{" "}
+                latestSellPrice = histDom.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>
+                    getElementById
+                </span>
+                (
+                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>
+                    'histsortitem'
+                </span>
+                )?.<span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>children</span>
+                [<span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>1</span>]?.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>children</span>[
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>0</span>]?.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>children</span>[
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>1</span>]?.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>innerText</span>?.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>replaceAll</span>
+                (<span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>'\n'</span>,{" "}
+                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>''</span>)?.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>replaceAll</span>
+                (<span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>'z'</span>,{" "}
+                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>''</span>)?.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>replaceAll</span>
+                (<span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>','</span>,{" "}
+                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>''</span>){"\n"}
+                {"            "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>if</span>{" "}
+                (!latestSellPrice) {"{"}
+                {"\n"}
+                {"                "}
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>this</span>.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>priceMap</span>
+                [itemId] = {"{"}
+                {"\n"}
+                {"                    "}itemId,{"\n"}
+                {"                    "}
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>price</span>:{" "}
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>0</span>
+                {"\n"}
+                {"                "}
+                {"}"}
+                {"\n"}
+                {"            "}
+                {"}"}{" "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>else</span>{" "}
+                {"{"}
+                {"\n"}
+                {"                "}
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>this</span>.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>priceMap</span>
+                [itemId] = {"{"}
+                {"\n"}
+                {"                    "}itemId,{"\n"}
+                {"                    "}
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>price</span>:{" "}
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>parseFloat</span>
+                (latestSellPrice){"\n"}
+                {"                "}
+                {"}"}
+                {"\n"}
+                {"            "}
+                {"}"}
+                {"\n"}
+                {"        "}
+                {"}"}
+                {"\n"}
+                {"\n"}
+                {"        "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>unlock</span>();
+                {"\n"}
+                {"\n"}
+                {"        "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+                    return
+                </span>{" "}
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>this</span>.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>priceMap</span>
+                [itemId]{"\n"}
+                {"    "}
+                {"}"}
+                {"\n"}
+                {"}"}
+                {"\n"}
+                {"\n"}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+                    async
+                </span>{" "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>function</span>{" "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>analyze</span>(
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }} />) {"{"}
+                {"\n"}
+                {"    "}
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>console</span>.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>clear</span>();
+                {"\n"}
+                {"    "}
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>console</span>.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>log</span>(
+                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>
+                    'Starting storage analysis'
+                </span>
+                ){"\n"}
+                {"    "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span>{" "}
+                domParser ={" "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>new</span>{" "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>DOMParser</span>
+                ();{"\n"}
+                {"    "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span>{" "}
+                mstorage ={" "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>await</span>{" "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>fetch</span>(
+                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>
+                    "https://flux.muhro.eu/?module=master&amp;action=mstorage"
+                </span>
+                ).<span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>then</span>(
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>
+                    <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>resp</span>{" "}
+                    =&gt;
+                </span>{" "}
+                resp.<span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>text</span>
+                ()){"\n"}
+                {"    "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span>{" "}
+                mstorageDom = domParser.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>
+                    parseFromString
+                </span>
+                (mstorage,{" "}
+                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>'text/html'</span>)
+                {"\n"}
+                {"    "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span>{" "}
+                mstorageRows ={" "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>Array</span>.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>
+                    <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+                        prototype
+                    </span>
+                </span>
+                .<span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>slice</span>.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>call</span>
+                (mstorageDom.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>
+                    getElementById
+                </span>
+                (
+                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>
+                    'storagetable'
+                </span>
+                ).<span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>children</span>[
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>1</span>].
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>children</span>)
+                {"\n"}
+                {"    "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span>{" "}
+                storageItems = mstorageRows.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>map</span>
+                (parseRow)?.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>filter</span>(
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>
+                    <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>v</span> =&gt;
+                </span>{" "}
+                v.<span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>itemId</span> =={" "}
+                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>'720'</span> || v.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>itemId</span> =={" "}
+                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>'985'</span>);
+                {"\n"}
+                {"    "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span>{" "}
+                vendHistoryFetcher ={" "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>new</span>{" "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>
+                    VendHistoryFetcher
+                </span>
+                ();{"\n"}
+                {"    "}
+                {"\n"}
+                {"    "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span>{" "}
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>BATCH_SIZE</span>{" "}
+                = <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>20</span>;{"\n"}
+                {"    "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+                    const
+                </span>{" "}
+                batches ={" "}
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>batch</span>
+                (storageItems,{" "}
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>BATCH_SIZE</span>
+                ){"\n"}
+                {"    "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span>{" "}
+                storageItemsWithPrice = [];{"\n"}
+                {"    "}
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>console</span>.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>log</span>(
+                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>
+                    'Processing storage items'
+                </span>
+                , storageItems.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>length</span>)
+                {"\n"}
+                {"    "}
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>console</span>.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>log</span>(
+                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>
+                    'Number of batches'
+                </span>
+                , batches.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>length</span>)
+                {"\n"}
+                {"\n"}
+                {"    "}
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>for</span> (
+                <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span> i ={" "}
+                <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>0</span>; i &lt;
+                batches.
+                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>length</span>;
+                i++) {"{"}
+                {"\n"}
+                {"        "}
+                <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>console</span>.
+                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>log</span>(
+                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>
+                    `Running batch{" "}
+                    <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>
+                        ${"{"}i +{" "}
+                        <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>1</span>
+                        {"}"}
+                    </span>{" "}
+                    of{" "}
+                    <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>
+                        ${"{"}batches.length{"}"}
+                    </span>
+    `
+  </span>
+  ){"\n"}
+  {"        "}
+  <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+    const
+  </span>{" "}
+  batch = batches[i];{"\n"}
+  {"        "}
+  <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+    const
+  </span>{" "}
+  tasks = [];{"\n"}
+  {"        "}
+  <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>for</span> (
+  <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span> j ={" "}
+  <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>0</span>; j &lt;
+  batch.
+  <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>length</span>;
+  j++) {"{"}
+  {"\n"}
+  {"            "}
+  <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+    const
+  </span>{" "}
+  item = batch[j]{"\n"}
+  {"            "}tasks.
+  <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>push</span>
+  (vendHistoryFetcher.
+  <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>
+    getItemVendHistory
+  </span>
+  (item.
+  <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>itemId</span>))
+  {"\n"}
+  {"        "}
+  {"}"}
+  {"\n"}
+  {"\n"}
+  {"        "}
+  <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+    await
+  </span>{" "}
+  <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>Promise</span>.
+  <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>all</span>
+  (tasks);{"\n"}
+  {"\n"}
+  {"        "}
+  <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>for</span> (
+  <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span> j ={" "}
+  <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>0</span>; j &lt;
+  batch.
+  <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>length</span>;
+  j++) {"{"}
+  {"\n"}
+  {"            "}
+  <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+    const
+  </span>{" "}
+  item = batch[j]{"\n"}
+  {"            "}
+  <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+    const
+  </span>{" "}
+  itemWithPrice ={" "}
+  <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>await</span>{" "}
+  tasks[j]{"\n"}
+  {"            "}storageItemsWithPrice.
+  <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>push</span>({"{"}
+  {"\n"}
+  {"                "}...item,{"\n"}
+  {"                "}...itemWithPrice,{"\n"}
+  {"                "}
+  <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>total</span>:
+  item.<span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>amount</span>{" "}
+  * itemWithPrice.
+  <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>price</span>
+  {"\n"}
+  {"            "}
+  {"}"}){"\n"}
+  {"        "}
+  {"}"}
+  {"\n"}
+  {"    "}
+  {"}"}
+  {"\n"}
+  {"\n"}
+  {"    "}
+  <span style={{ color: "rgb(217, 30, 24)", fontWeight: 400 }}>console</span>.
+  <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>log</span>
+  (storageItemsWithPrice){"\n"}
+  {"}"}
+  {"\n"}
+  {"\n"}
+  <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>
+    await
+  </span>{" "}
+  <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>analyze</span>();
+</pre>
+
+        )
+    }
+
 </script>
 
 </html>
