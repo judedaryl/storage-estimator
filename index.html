@@ -361,7 +361,6 @@
     function Code() {
         return (
             <pre
-                id="codeSnippet"
                 style={{
                     fontFamily: "monospace",
                     color: "rgb(84, 84, 84)",
@@ -795,16 +794,7 @@
                 <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span>{" "}
                 storageItems = mstorageRows.
                 <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>map</span>
-                (parseRow)?.
-                <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>filter</span>(
-                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>
-                    <span style={{ color: "rgb(170, 93, 0)", fontWeight: 400 }}>v</span> =&gt;
-                </span>{" "}
-                v.<span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>itemId</span> =={" "}
-                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>'720'</span> || v.
-                <span style={{ color: "rgb(84, 84, 84)", fontWeight: 400 }}>itemId</span> =={" "}
-                <span style={{ color: "rgb(0, 128, 0)", fontWeight: 400 }}>'985'</span>);
-                {"\n"}
+                (parseRow);{"\n"}
                 {"    "}
                 <span style={{ color: "rgb(121, 40, 161)", fontWeight: 400 }}>var</span>{" "}
                 vendHistoryFetcher ={" "}
@@ -971,6 +961,7 @@
   </span>{" "}
   <span style={{ color: "rgb(0, 127, 170)", fontWeight: 400 }}>analyze</span>();
 </pre>
+
 
         )
     }
